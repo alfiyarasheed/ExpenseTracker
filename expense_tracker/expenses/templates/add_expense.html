@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Expense</title>
+</head>
+<body>
+
+<form method="POST">
+    {% csrf_token %}
+<h2 id="expense_heading">Add Expense for
+    {{today|date:"j F Y"}}
+    ({{today|date:"l"}})
+</h2>
+
+<details>
+    <summary>Select Another Date</summary>
+    <input
+        type="date"
+        name="expense_date"
+        value="{{ today|date:'Y-m-d' }}"
+        id="expense_date"
+    >
+</details>
+<br>
+<script>
+    const dateInput=document.getElementById('expense_date')
+    const heading=document.getElementById('expense_heading')
+
+    dateInput.addEventListener("change",function()
+{
+    const selectedDate=new Date(this.value)
+    const formattedDate=selectedDate.toLocaleDateString(
+        "en-GB",
+        {
+            day:"numeric",
+            month:"long",
+            year:"numeric"
+        }
+    );
+    const day=selectedDate.toLocaleDateString(
+        "en-GB",
+        {
+            weekday:"long"
+        }
+    );
+    heading.textContent=
+        `Add Expense for ${formattedDate} (${day})` ;
+}
+);
+
+</script>
+
+<table id="expenseTable" border="1">
+
+    <tr>
+        <th>Category</th>
+        <th>Description</th>
+         <th> Amount </th>
+    </tr>
+    <tr>
+        <td>
+    <select name="category[]">
+        <option value="Food">Food</option>
+        <option value="Travel">Travel</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Health">Health</option>
+        <option value="Other">Other</option>
+    </select>
+</td>
+
+         <td>
+            <input type="text" name="description[]">
+        </td>
+
+         <td>
+            <input type="number" name="amount[]">
+        </td>
+    </tr>
+    <br>
+    <buttion type="button" onclick="addRow()">
+        + Add Another Expense
+    </buttion>
+
+    <br><br>
+    <button type="submit">Save All Expenses</button>
+</table>
+
+<script>
+function addRow(){
+    const table=document.getElementById("expenseTable")
+    const row=table.insertRow();
+    row.innerHTML=`
+
+    <td>
+    <select name="category[]">
+        <option value="Food">Food</option>
+        <option value="Travel">Travel</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Health">Health</option>
+        <option value="Other">Other</option>
+    </select>
+</td>
+     <td>
+    <input type="text" name="description[]">
+    </td>
+
+     <td>
+    <input type="number" name="amount[]">
+    </td>
+    `;
+}
+</script>
+</form>
+
+</body>
+</html>
