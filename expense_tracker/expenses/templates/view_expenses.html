@@ -1,42 +1,42 @@
-<!-- <!DOCTYPE html>
-<html>
-    <head>
-        <title>
-            View Expenses
-        </title>
-
-    </head>
-    <body>
-        <h1>
-            All Expenses
-        </h1>
-        <table border="1">
-        <tr>
-            <th>Amount</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Date</th>
-        </tr>
-
-        {% for expense in expenses %}
-        <tr>
-            <td>{{expense.amount}}</td>
-            <td>{{expense.category}}</td>
-            <td>{{expense.description}}</td>
-            <td>{{expense.expense_date}}</td>
-        </tr>
-        {% endfor %}
-        <tr>
-            <td colspan="4">Total Expense  :{{total_spent}}</td>
-        </tr>
-        </table>
-    </body>
-</html> -->
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>View Expenses</title>
+
+    <style>
+
+.action{
+    position:relative;
+}
+
+
+.menu{
+
+    display:none;
+
+    position:absolute;
+
+    top:100%;
+
+    right:0;
+
+    background:white;
+
+    border:1px solid black;
+
+    z-index:1000;
+
+}
+
+
+table,
+td{
+
+    overflow:visible;
+
+}
+</style>
+   
 </head>
 
 <body>
@@ -60,6 +60,7 @@
     <th>Category</th>
     <th>Description</th>
     <th>Amount</th>
+    <th>Action</th>
     
 </tr>
 
@@ -79,7 +80,24 @@
 <td>
     ₹{{ expense.amount }}
 </td>
-
+<td>
+<div class="action">
+    <button type="button" onclick="showMenu(this)">
+         ⋮
+    </button>
+    <div class="menu">
+        <a href="{% url 'edit_expense' expense.id %}">
+            Edit
+        </a>
+        <form method="POST" action="{% url 'delete_expense' expense.id %}" >
+            {% csrf_token %}
+<button type="submit">
+    Delete
+</button>
+        </form>
+    </div>
+</div>
+</td>
 </tr>
 
 {% endfor %}
@@ -127,6 +145,30 @@ Overall Total :
 
 </table>
 
+<script>
 
+function showMenu(button){
+
+    let menu = button.nextElementSibling;
+
+    if(menu.style.display === "block"){
+        menu.style.display="none";
+    }
+    else{
+        menu.style.display="block";
+    }
+}
+    
+    document.addEventListener("click",function(event){
+
+        let menus=document.querySelectorAll(".menu")
+        menus.forEach(function(menu){
+            if(!menu.parentElement.contains(event.target)){
+                menu.style.display="none";
+            }
+        });
+});
+
+</script>
 </body>
 </html>

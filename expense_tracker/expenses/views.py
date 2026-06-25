@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from . models import Expense
 from datetime import date
 # Create your views here.
@@ -40,6 +40,7 @@ def view_expenses(request):
         grouped_expenses[date]['expenses'].append(expense)
         grouped_expenses[date]['daily_total']+=expense.amount
         total_spent+=expense.amount
+        
     return render(
         request,
         'view_expenses.html',
@@ -47,3 +48,14 @@ def view_expenses(request):
          'total_spent':total_spent
          }
     )
+def edit_expense(request,id):
+    expense=Expense.objects.get(id=id)
+    return render(
+        request,
+        'edit_expense.html',
+        {'expense':expense}
+    )
+def delete_expense(request,id):
+    expense=Expense.objects.get(id=id)
+    expense.delete()
+    return redirect('view_expenses')
