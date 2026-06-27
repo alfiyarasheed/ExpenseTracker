@@ -50,6 +50,12 @@ def view_expenses(request):
     )
 def edit_expense(request,id):
     expense=Expense.objects.get(id=id)
+    if request.method=="POST":
+        expense.category=request.POST['category']
+        expense.description=request.POST['description']
+        expense.amount=request.POST['amount']
+        expense.save()
+        return redirect('view_expenses')
     return render(
         request,
         'edit_expense.html',

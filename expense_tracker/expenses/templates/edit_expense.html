@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Edit Expense</title>
+    </head>
+    <body>
+        <h2>Edit Expense</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <label>Category</label>
+            <select name="category">
+                <option {% if expense.category == "Food" %}selected{% endif %}>Food</option>
+                <option {% if expense.category == "Travel" %}selected{% endif %}>Travel</option>
+                <option {% if expense.category == "Shopping" %}selected{% endif %}>Shopping</option>
+                <option {% if expense.category == "Health" %}selected{% endif %}>Health</option>
+                <option {% if expense.category == "Other" %}selected{% endif %}>Other</option>
+            </select>
+            <label>Description:</label>
+            <input type="text" name="description" value="{{expense.description}}">
+            <label>Amount:</label>
+            <input type="number" name="amount" value="{{expense.amount}}">
+            <br><br>
+            <button type="submit">
+                Save Changes
+            </button>
+        </form>
+    </body>
+</html>
