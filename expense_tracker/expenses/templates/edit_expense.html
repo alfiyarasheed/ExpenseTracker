@@ -2,23 +2,83 @@
 <html>
     <head>
         <title>Edit Expense</title>
+        <style>
+
+.error-message {
+    color: red;
+    font-weight: normal;
+}
+
+</style>
     </head>
     <body>
         <h2>Edit Expense</h2>
+         {% if error %}
+    <p class="error-message">
+        {{error}}
+    </p>
+    {% endif %}
         <form method="POST">
             {% csrf_token %}
             <label>Category</label>
-            <select name="category">
-                <option {% if expense.category == "Food" %}selected{% endif %}>Food</option>
-                <option {% if expense.category == "Travel" %}selected{% endif %}>Travel</option>
-                <option {% if expense.category == "Shopping" %}selected{% endif %}>Shopping</option>
-                <option {% if expense.category == "Health" %}selected{% endif %}>Health</option>
-                <option {% if expense.category == "Other" %}selected{% endif %}>Other</option>
-            </select>
+            <!-- <select name="category" required>
+                <option {% if new_category == "Food" or expense.category == "Food" %}selected{% endif %}>Food</option>
+                <option {% if new_category == "Travel" or expense.category == "Travel" %}selected{% endif %}>Travel</option>
+                <option {% if new_category == "Shopping" or expense.category == "Shopping" %}selected{% endif %}>Shopping</option>
+                <option {% if new_category == "Health" or expense.category == "Health" %}selected{% endif %}>Health</option>
+                <option {% if new_category == "Other" or expense.category == "Other" %}selected{% endif %}>Other</option>
+            </select> -->
+            <select name="category" required>
+
+<option value="Food"
+{% if new_category == "Food" or new_category is None and expense.category == "Food" %}
+selected
+{% endif %}
+>
+Food
+</option>
+
+
+<option value="Travel"
+{% if new_category == "Travel" or new_category is None and expense.category == "Travel" %}
+selected
+{% endif %}
+>
+Travel
+</option>
+
+
+<option value="Shopping"
+{% if new_category == "Shopping" or new_category is None and expense.category == "Shopping" %}
+selected
+{% endif %}
+>
+Shopping
+</option>
+
+
+<option value="Health"
+{% if new_category == "Health" or new_category is None and expense.category == "Health" %}
+selected
+{% endif %}
+>
+Health
+</option>
+
+
+<option value="Other"
+{% if new_category == "Other" or new_category is None and expense.category == "Other" %}
+selected
+{% endif %}
+>
+Other
+</option>
+
+</select>
             <label>Description:</label>
-            <input type="text" name="description" value="{{expense.description}}">
+            <input type="text" name="description" value="{% if new_description is not None %}{{new_description}}{% else %}{{expense.description}}{% endif %}">
             <label>Amount:</label>
-            <input type="number" name="amount" value="{{expense.amount}}">
+            <input type="number" name="amount" value="{% if new_amount is not None %}{{new_amount}}{% else %}{{expense.amount}}{% endif %}" >
             <br><br>
             <button type="submit">
                 Save Changes

@@ -2,6 +2,14 @@
 <html>
 <head>
     <title>Add Expense</title>
+    <style>
+
+.error-message {
+    color: red;
+    font-weight: normal;
+}
+
+</style>
 </head>
 <body>
 
@@ -11,7 +19,11 @@
     {{today|date:"j F Y"}}
     ({{today|date:"l"}})
 </h2>
-
+ {% if error %}
+    <p class="error-message">
+        {{error}}
+    </p>
+    {% endif %}
 <details>
     <summary>Select Another Date</summary>
     <input
@@ -57,25 +69,108 @@
         <th>Description</th>
          <th> Amount </th>
     </tr>
-    <tr>
-        <td>
-    <select name="category[]">
-        <option value="Food">Food</option>
-        <option value="Travel">Travel</option>
-        <option value="Shopping">Shopping</option>
-        <option value="Health">Health</option>
-        <option value="Other">Other</option>
-    </select>
+
+    {% if old_expenses %}
+
+{% for expense in old_expenses %}
+
+<tr>
+
+<td>
+<select name="category[]" required>
+
+<option value="Food"
+{% if expense.category == "Food" %}selected{% endif %}>
+Food
+</option>
+
+<option value="Travel"
+{% if expense.category == "Travel" %}selected{% endif %}>
+Travel
+</option>
+
+<option value="Shopping"
+{% if expense.category == "Shopping" %}selected{% endif %}>
+Shopping
+</option>
+
+<option value="Health"
+{% if expense.category == "Health" %}selected{% endif %}>
+Health
+</option>
+
+<option value="Other"
+{% if expense.category == "Other" %}selected{% endif %}>
+Other
+</option>
+
+</select>
 </td>
 
-         <td>
-            <input type="text" name="description[]">
-        </td>
 
-         <td>
-            <input type="number" name="amount[]">
-        </td>
-    </tr>
+<td>
+
+<input 
+type="text"
+name="description[]"
+value="{{ expense.description }}"
+>
+
+</td>
+
+
+<td>
+
+<input 
+type="number"
+name="amount[]"
+min="1"
+value="{{ expense.amount }}"
+required
+>
+
+</td>
+
+
+</tr>
+
+{% endfor %}
+
+
+{% else %}
+
+<tr>
+
+<td>
+<select name="category[]" required>
+
+<option value="Food">Food</option>
+<option value="Travel">Travel</option>
+<option value="Shopping">Shopping</option>
+<option value="Health">Health</option>
+<option value="Other">Other</option>
+
+</select>
+</td>
+
+
+<td>
+<input type="text" name="description[]">
+</td>
+
+
+<td>
+<input 
+type="number"
+name="amount[]"
+min="1"
+required>
+</td>
+
+
+</tr>
+
+{% endif %}
     <br>
     <buttion type="button" onclick="addRow()">
         + Add Another Expense
